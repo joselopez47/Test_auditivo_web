@@ -17,15 +17,16 @@
         }
         .container {
             display: flex;
-            width: 800px;
+            width: 850px;
             height: 600px;
             background-color: #1D1D1D;
             border-radius: 15px;
             box-shadow: 0 10px 30px rgba(0,0,0,0.5);
             overflow: hidden;
+            position: relative;
         }
         .col-left {
-            flex: 1;
+            flex: 1.2;
             padding: 30px;
             display: flex;
             flex-direction: column;
@@ -33,7 +34,7 @@
             justify-content: center;
         }
         .col-right {
-            flex: 1;
+            flex: 0.8;
             background-color: #1E293B;
             padding: 30px;
             display: flex;
@@ -44,20 +45,113 @@
         h2 { font-size: 22px; margin-bottom: 5px; color: #F3F4F6; text-align: center;}
         p.subtitle { color: #9CA3AF; font-size: 12px; margin-bottom: 20px; text-align: center; }
         
-        /* Canvas Perilla */
-        #canvasPerilla {
-            background-color: #1D1D1D;
+        /* Contenedor del Osciloscopio */
+        .wave-container {
+            width: 320px;
+            height: 120px;
+            background-color: #0F172A;
+            border: 2px solid #334155;
+            border-radius: 10px;
+            overflow: hidden;
+            margin-bottom: 20px;
+            box-shadow: inset 0 0 15px rgba(0,0,0,0.6);
+        }
+        #canvasOnda {
+            width: 100%;
+            height: 100%;
+            display: block;
+        }
+
+        /* Slider Moderno */
+        .slider-container {
+            width: 320px;
+            margin: 15px 0;
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+        }
+        .modern-slider {
+            -webkit-appearance: none;
+            width: 100%;
+            height: 8px;
+            border-radius: 5px;
+            background: #374151;
+            outline: none;
             cursor: pointer;
         }
+        .modern-slider::-webkit-slider-thumb {
+            -webkit-appearance: none;
+            appearance: none;
+            width: 22px;
+            height: 22px;
+            border-radius: 50%;
+            background: #3B82F6;
+            cursor: pointer;
+            box-shadow: 0 0 10px rgba(59, 130, 246, 0.5);
+            transition: transform 0.1s;
+        }
+        .modern-slider::-webkit-slider-thumb:hover {
+            transform: scale(1.2);
+            background: #60A5FA;
+        }
+        .slider-labels {
+            display: flex;
+            justify-content: space-between;
+            width: 100%;
+            color: #6B7280;
+            font-size: 11px;
+            margin-top: 8px;
+        }
+
+        /* Display de Frecuencia */
+        .freq-container {
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            gap: 15px;
+            margin: 15px 0;
+        }
+        .btn-step {
+            background-color: #374151;
+            color: #F3F4F6;
+            width: 85px;
+            padding: 8px 0;
+            font-size: 12px;
+            border-radius: 6px;
+            cursor: pointer;
+            border: none;
+            user-select: none;
+        }
+        .btn-step:hover { background-color: #4B5563; }
         
+        .freq-wrapper {
+            min-width: 140px;
+            text-align: center;
+        }
         .freq-display {
             font-size: 24px;
             font-weight: bold;
             color: #3B82F6;
-            margin: 15px 0;
+            cursor: pointer;
+            padding: 2px 5px;
+            border-radius: 4px;
+            display: inline-block;
         }
+        .freq-display:hover { background-color: #2D3748; }
+        .freq-input {
+            font-size: 22px;
+            font-weight: bold;
+            color: #3B82F6;
+            background-color: #0F172A;
+            border: 2px solid #3B82F6;
+            border-radius: 6px;
+            width: 110px;
+            text-align: center;
+            outline: none;
+        }
+
         button {
-            width: 260px;
+            width: 320px;
             padding: 12px;
             font-weight: bold;
             border: none;
@@ -68,13 +162,22 @@
         }
         .btn-audio { background-color: #3B82F6; color: white; }
         .btn-audio.active { background-color: #EF4444; }
+        
+        .actions-container {
+            display: flex;
+            gap: 10px;
+            width: 300px;
+            justify-content: center;
+        }
         .btn-action {
             background-color: #10B981;
             color: white;
-            width: 280px;
-            font-size: 15px;
-            padding: 15px;
+            flex: 1;
+            font-size: 13px;
+            padding: 12px 5px;
         }
+        .btn-action:hover { background-color: #059669; }
+        
         .status-lbl {
             color: #94A3B8;
             font-style: italic;
@@ -83,61 +186,179 @@
             height: 40px;
             margin: 15px 0;
         }
+        
         .led-screen {
             background-color: #0F172A;
             width: 300px;
             height: 120px;
             border-radius: 10px;
             display: flex;
+        }
+        .led-section {
+            flex: 1;
+            display: flex;
+            flex-direction: column;
             justify-content: center;
             align-items: center;
             text-align: center;
+            font-size: 14px;
+            color: #94A3B8;
+        }
+        .led-section:first-child {
+            border-right: 1px solid #1E293B;
+        }
+        .led-val {
             font-size: 22px;
             font-weight: bold;
+            color: #F8FAFC;
+            margin-top: 5px;
         }
+        
         .separator {
             width: 260px;
             height: 2px;
             background-color: #334155;
             margin: 20px 0;
         }
+
+        /* Modal Flotante para solicitar la Edad Real */
+        .modal-overlay {
+            position: absolute;
+            top: 0; left: 0; right: 0; bottom: 0;
+            background: rgba(0, 0, 0, 0.85);
+            display: none;
+            justify-content: center;
+            align-items: center;
+            z-index: 100;
+        }
+        .modal-box {
+            background: #1E293B;
+            border: 2px solid #3B82F6;
+            border-radius: 12px;
+            padding: 25px;
+            width: 280px;
+            text-align: center;
+            box-shadow: 0 0 20px rgba(59, 130, 246, 0.3);
+        }
+        .modal-box h3 { margin-top: 0; color: #F3F4F6; font-size: 18px; }
+        .modal-box p { color: #94A3B8; font-size: 13px; margin-bottom: 15px; }
+        .modal-box input {
+            width: 80%;
+            padding: 10px;
+            font-size: 18px;
+            text-align: center;
+            border-radius: 6px;
+            border: 1px solid #4B5563;
+            background: #0F172A;
+            color: white;
+            outline: none;
+            margin-bottom: 15px;
+        }
+        .modal-box button {
+            width: 100%;
+            padding: 10px;
+            background: #10B981;
+            color: white;
+            border: none;
+            border-radius: 6px;
+            cursor: pointer;
+            font-weight: bold;
+        }
+        .modal-box button:hover { background: #059669; }
     </style>
 </head>
 <body>
 
 <div class="container">
+    <!-- COLUMNA IZQUIERDA -->
     <div class="col-left">
         <h2>Generador de Tonos Dinámico</h2>
-        <p class="subtitle">Arrastrá el mouse / dedo para sintonizar las frecuencias:</p>
-        <canvas id="canvasPerilla" width="250" height="250"></canvas>
-        <div class="freq-display" id="lblFrecuencia">12000 Hz</div>
+        <p class="subtitle">Monitoreo de onda senoidal en tiempo real:</p>
+        
+        <div class="wave-container">
+            <canvas id="canvasOnda" width="320" height="120"></canvas>
+        </div>
+
+        <div class="slider-container">
+            <input type="range" id="sliderFrecuencia" class="modern-slider" min="20" max="22000" value="12000">
+            <div class="slider-labels">
+                <span>20 Hz</span>
+                <span>11000 Hz</span>
+                <span>22000 Hz</span>
+            </div>
+        </div>
+        
+        <div class="freq-container">
+            <button class="btn-step" id="btnMenos">Anterior (-100)</button>
+            <div class="freq-wrapper" id="freqWrapper">
+                <div class="freq-display" id="lblFrecuencia">12000 Hz</div>
+            </div>
+            <button class="btn-step" id="btnMas">Siguiente (+100)</button>
+        </div>
+        
         <button class="btn-audio" id="btnEscuchar">▶ Encender Tono Continuo</button>
     </div>
 
+    <!-- COLUMNA DERECHA -->
     <div class="col-right">
         <h2 style="color: #38BDF8;">Consola de Análisis</h2>
-        <button class="btn-action" id="btnSi">[ "Sí" escucho este tono ]</button>
-        <div class="status-lbl" id="lblEstado">Encendé el tono y mové la perilla<br>para escanear tu oído.</div>
+        
+        <div class="actions-container">
+            <button class="btn-action" id="btnVol1">Voluntario 1<br>[ Registrar ]</button>
+            <button class="btn-action" id="btnVol2" style="background-color: #0EA5E9;">Voluntario 2<br>[ Registrar ]</button>
+        </div>
+        
+        <div class="status-lbl" id="lblEstado">Encendé el tono y mové el slider<br>para escanear tu oído.</div>
         <div class="separator"></div>
-        <div class="led-screen" id="lblResultado">
-            Edad Auditiva<br>--
+        
+        <div class="led-screen">
+            <div class="led-section">
+                <span>Voluntario 1</span>
+                <div class="led-val" id="resVol1">--</div>
+            </div>
+            <div class="led-section">
+                <span>Voluntario 2</span>
+                <div class="led-val" id="resVol2">--</div>
+            </div>
+        </div>
+    </div>
+
+    <!-- VENTANA MODAL PARA REGISTRO DE EDAD REAL AL FINAL -->
+    <div class="modal-overlay" id="modalEdad">
+        <div class="modal-box">
+            <h3 id="modalTitulo">Voluntario 1</h3>
+            <p>Ingresa tu edad real para completar el registro y la métrica de análisis:</p>
+            <input type="number" id="txtEdadReal" placeholder="Ej: 22" min="5" max="100">
+            <button id="btnGuardarRegistro">Guardar y Finalizar</button>
         </div>
     </div>
 </div>
 
 <script>
-    // Variables de Estado
+    // CONFIGURACIÓN DE TU GOOGLE FORM (REEMPLAZAR CON TUS IDS DE GOOGLE FORMS)
+    const FORM_ID = "1FAIpQLSc_AQUÍ_VA_TU_FORM_ID";
+    const ENTRY_FRECUENCIA = "entry.100000001";     // Campo: Frecuencia máxima (Hz)
+    const ENTRY_EDAD_ESTIMADA = "entry.200000002";  // Campo: Edad auditiva estimada
+    const ENTRY_EDAD_REAL = "entry.300000003";      // Campo: Edad real del usuario
+    const ENTRY_DIFERENCIA = "entry.400000004";     // Campo: Brecha/Diferencia (Edad Estimada - Edad Real)
+
     let reproduciendo = false;
     let frecuenciaActual = 12000;
-    
-    // Web Audio API
+    let voluntarioSeleccionado = null;
+    let edadAuditivaCalculada = null;
+
     let audioCtx = null;
     let oscillator = null;
     let gainNode = null;
+    let analyser = null;
+    let bufferLength = 0;
+    let dataArray = null;
 
-    // Interpolación Matemática (Equivalente a np.interp)
     const FRECUENCIAS_REFE = [20, 250, 8000, 12000, 15000, 16000, 17400, 19000, 20000, 22000];
     const EDADES_REFE      = [90.0, 80.0, 70.0, 50.0, 40.0, 30.0, 25.0, 22.0, 20.0, 18.0];
+
+    const F_MIN = 20;
+    const F_MAX = 22000;
 
     function calcularEdadAuditiva(hz) {
         if (hz <= FRECUENCIAS_REFE[0]) return EDADES_REFE[0];
@@ -152,95 +373,124 @@
         return 50;
     }
 
-    // Elementos DOM
-    const canvas = document.getElementById('canvasPerilla');
-    const ctx = canvas.getContext('2d');
+    const canvasOnda = document.getElementById('canvasOnda');
+    const ctxOnda = canvasOnda.getContext('2d');
+    const slider = document.getElementById('sliderFrecuencia');
+    const freqWrapper = document.getElementById('freqWrapper');
     const lblFrecuencia = document.getElementById('lblFrecuencia');
     const btnEscuchar = document.getElementById('btnEscuchar');
-    const btnSi = document.getElementById('btnSi');
+    const btnVol1 = document.getElementById('btnVol1');
+    const btnVol2 = document.getElementById('btnVol2');
+    const btnMenos = document.getElementById('btnMenos');
+    const btnMas = document.getElementById('btnMas');
     const lblEstado = document.getElementById('lblEstado');
-    const lblResultado = document.getElementById('lblResultado');
+    const resVol1 = document.getElementById('resVol1');
+    const resVol2 = document.getElementById('resVol2');
 
-    // Dibujo de la Perilla
-    function dibujarPerilla(anguloDeg) {
-        ctx.clearRect(0, 0, canvas.width, canvas.height);
-        const cx = 125, cy = 125;
-        
-        // Círculos base
-        ctx.beginPath(); ctx.arc(cx, cy, 90, 0, 2 * Math.PI); ctx.fillStyle = "#2D2D2D"; ctx.fill();
-        ctx.lineWidth = 4; ctx.strokeStyle = "#4B5563"; ctx.stroke();
-        ctx.beginPath(); ctx.arc(cx, cy, 75, 0, 2 * Math.PI); ctx.fillStyle = "#1F2937"; ctx.fill();
+    // Elementos del Modal
+    const modalEdad = document.getElementById('modalEdad');
+    const modalTitulo = document.getElementById('modalTitulo');
+    const txtEdadReal = document.getElementById('txtEdadReal');
+    const btnGuardarRegistro = document.getElementById('btnGuardarRegistro');
 
-        // Línea indicadora
-        const rad = (anguloDeg * Math.PI) / 180;
-        const lx = cx + 85 * Math.cos(rad);
-        const ly = cy - 85 * Math.sin(rad);
-
-        ctx.beginPath();
-        ctx.moveTo(cx, cy);
-        ctx.lineTo(lx, ly);
-        ctx.lineWidth = 5;
-        ctx.strokeStyle = "#3B82F6";
-        ctx.stroke();
-    }
-
-    // Lógica del Mouse / Movimiento
-    function procesarMovimiento(e) {
-        const rect = canvas.getBoundingClientRect();
-        const x = (e.clientX || e.touches[0].clientX) - rect.left;
-        const y = (e.clientY || e.touches[0].clientY) - rect.top;
-        
-        const cx = 125, cy = 125;
-        const dx = x - cx;
-        const dy = cy - y;
-
-        let anguloRad = Math.atan2(dy, dx);
-        let anguloDeg = anguloRad * (180 / Math.PI);
-        let anguloAjustado = (270 - anguloDeg) % 360;
-
-        if (anguloAjustado >= 45 && anguloAjustado <= 315) {
-            let porcentaje = (anguloAjustado - 45) / (315 - 45);
-            frecuenciaActual = Math.floor(20 * Math.pow((22000 / 20), porcentaje));
-            frecuenciaActual = Math.max(20, Math.min(22000, frecuenciaActual));
-
-            lblFrecuencia.innerText = `${frecuenciaActual} Hz`;
-            dibujarPerilla(anguloDeg);
-
-            if (oscillator && reproduciendo) {
-                oscillator.frequency.setValueAtTime(frecuenciaActual, audioCtx.currentTime);
-            }
+    function actualizarFrecuenciaAudio(hz) {
+        if (oscillator && reproduciendo) {
+            oscillator.frequency.cancelScheduledValues(audioCtx.currentTime);
+            oscillator.frequency.exponentialRampToValueAtTime(hz, audioCtx.currentTime + 0.04);
         }
     }
 
-    // Eventos de interacción
-    let activo = false;
-    canvas.addEventListener('mousedown', () => activo = true);
-    window.addEventListener('mouseup', () => activo = false);
-    canvas.addEventListener('mousemove', (e) => { if(activo) procesarMovimiento(e); });
-    canvas.addEventListener('click', procesarMovimiento);
-    // Soporte táctil móvil
-    canvas.addEventListener('touchmove', (e) => { e.preventDefault(); procesarMovimiento(e); }, {passive: false});
+    function cambiarFrecuenciaGlobal(nuevaFreq) {
+        frecuenciaActual = Math.max(F_MIN, Math.min(F_MAX, nuevaFreq));
+        lblFrecuencia.innerText = `${frecuenciaActual} Hz`;
+        slider.value = frecuenciaActual;
+        actualizarFrecuenciaAudio(frecuenciaActual);
+    }
 
-    // Control de Audio
+    slider.addEventListener('input', (e) => cambiarFrecuenciaGlobal(parseInt(e.target.value)));
+    btnMenos.addEventListener('click', () => cambiarFrecuenciaGlobal(frecuenciaActual - 100));
+    btnMas.addEventListener('click', () => cambiarFrecuenciaGlobal(frecuenciaActual + 100));
+
+    lblFrecuencia.addEventListener('click', () => {
+        const input = document.createElement('input');
+        input.type = 'number';
+        input.className = 'freq-input';
+        input.value = frecuenciaActual;
+        input.min = F_MIN;
+        input.max = F_MAX;
+
+        freqWrapper.innerHTML = '';
+        freqWrapper.appendChild(input);
+        input.focus();
+        input.select();
+
+        function procesarEntradaManual() {
+            let valor = parseInt(input.value);
+            if (isNaN(valor)) valor = frecuenciaActual;
+            freqWrapper.innerHTML = '';
+            freqWrapper.appendChild(lblFrecuencia);
+            cambiarFrecuenciaGlobal(valor);
+        }
+
+        input.addEventListener('blur', () => procesarEntradaManual());
+        input.addEventListener('keydown', (e) => { if (e.key === 'Enter') procesarEntradaManual(); });
+    });
+
+    function dibujarOsciloscopio() {
+        requestAnimationFrame(dibujarOsciloscopio);
+        const width = canvasOnda.width;
+        const height = canvasOnda.height;
+
+        ctxOnda.fillStyle = '#0F172A';
+        ctxOnda.fillRect(0, 0, width, height);
+        ctxOnda.lineWidth = 2.5;
+        ctxOnda.strokeStyle = reproduciendo ? '#10B981' : '#475569';
+        ctxOnda.beginPath();
+
+        if (reproduciendo && analyser) {
+            analyser.getByteTimeDomainData(dataArray);
+            let sliceWidth = width / bufferLength;
+            let x = 0;
+
+            for (let i = 0; i < bufferLength; i++) {
+                let v = dataArray[i] / 128.0;
+                let y = (v * height) / 2;
+                if (i === 0) ctxOnda.moveTo(x, y);
+                else ctxOnda.lineTo(x, y);
+                x += sliceWidth;
+            }
+        } else {
+            ctxOnda.moveTo(0, height / 2);
+            ctxOnda.lineTo(width, height / 2);
+        }
+        ctxOnda.lineTo(width, height / 2);
+        ctxOnda.stroke();
+    }
+
     btnEscuchar.addEventListener('click', () => {
         if (!reproduciendo) {
             if(!audioCtx) audioCtx = new (window.AudioContext || window.webkitAudioContext)();
-            
             oscillator = audioCtx.createOscillator();
             gainNode = audioCtx.createGain();
+            analyser = audioCtx.createAnalyser();
+            
+            analyser.fftSize = 2048;
+            bufferLength = analyser.frequencyBinCount;
+            dataArray = new Uint8Array(bufferLength);
             
             oscillator.type = 'sine';
             oscillator.frequency.setValueAtTime(frecuenciaActual, audioCtx.currentTime);
-            gainNode.gain.setValueAtTime(0.1, audioCtx.currentTime); // Volumen suave (0.1)
+            gainNode.gain.setValueAtTime(0.1, audioCtx.currentTime);
 
-            oscillator.connect(gainNode);
+            oscillator.connect(analyser);
+            analyser.connect(gainNode);
             gainNode.connect(audioCtx.destination);
             oscillator.start();
 
             reproduciendo = true;
             btnEscuchar.innerText = "■ Detener Tono";
             btnEscuchar.classList.add('active');
-            lblEstado.innerHTML = "Tono activo.<br>Girá la perilla para calibrar tu oído.";
+            lblEstado.innerHTML = "Tono activo.<br>Mové el slider para calibrar tu oído.";
             lblEstado.style.color = "#60A5FA";
         } else {
             detenerAudio();
@@ -259,23 +509,77 @@
         }
     }
 
-    btnSi.addEventListener('click', () => {
+    // PASO 1: Iniciar proceso al presionar el botón de voluntario
+    function abrirRegistroVoluntario(num) {
         detenerAudio();
-        lblEstado.innerHTML = "Calculando edad auditiva...";
+        voluntarioSeleccionado = num;
+        edadAuditivaCalculada = calcularEdadAuditiva(frecuenciaActual);
+
+        // Mostrar en la pantalla LED el cálculo preliminar
+        if (num === 1) {
+            resVol1.innerHTML = `${edadAuditivaCalculada}<br><span style="font-size:12px;">años</span>`;
+        } else {
+            resVol2.innerHTML = `${edadAuditivaCalculada}<br><span style="font-size:12px;">años</span>`;
+        }
+
+        // Abrir Modal para pedir la Edad Real
+        modalTitulo.innerText = `Voluntario ${num}`;
+        txtEdadReal.value = '';
+        modalEdad.style.display = 'flex';
+        txtEdadReal.focus();
+    }
+
+    btnVol1.addEventListener('click', () => abrirRegistroVoluntario(1));
+    btnVol2.addEventListener('click', () => abrirRegistroVoluntario(2));
+
+    // PASO 2: Confirmación e ingreso a Google Forms (Formato Indistinguible)
+    btnGuardarRegistro.addEventListener('click', async () => {
+        let edadReal = parseInt(txtEdadReal.value);
+        
+        if (isNaN(edadReal) || edadReal < 1 || edadReal > 120) {
+            alert("Por favor, ingresa una edad válida.");
+            return;
+        }
+
+        modalEdad.style.display = 'none';
+        lblEstado.innerHTML = "Guardando respuesta<br>en Google Forms...";
         lblEstado.style.color = "#A78BFA";
 
-        setTimeout(() => {
-            let edad = calcularEdadAuditiva(frecuenciaActual);
-            lblResultado.innerHTML = `Edad Auditiva<br>${edad} años`;
-            lblEstado.innerHTML = "¡Cálculo procesado<br>con éxito!";
-            lblEstado.style.color = "#34D399";
+        // Métrica: Cálculo de la diferencia (Brecha auditiva)
+        let diferencia = (parseFloat(edadAuditivaCalculada) - edadReal).toFixed(1);
 
-            alert(`Test Finalizado\n\nFrecuencia Máxima Detectada: ${frecuenciaActual} Hz\nEdad Auditiva Estimada: ${edad} años`);
-        }, 300);
+        // Enviar datos unificados (sin identificar voluntario 1 o 2 en las columnas)
+        await registrarEnGoogleForms(frecuenciaActual, edadAuditivaCalculada, edadReal, diferencia);
+
+        lblEstado.innerHTML = `¡Registro procesado con éxito!<br>Diferencia: ${diferencia} años.`;
+        lblEstado.style.color = "#34D399";
     });
 
-    // Inicializar
-    dibujarPerilla(-45);
+    // Envío vía POST silencioso a Google Forms
+    async function registrarEnGoogleForms(frecuencia, edadEstimada, edadReal, diferencia) {
+        const formUrl = `https://docs.google.com/forms/d/e/${FORM_ID}/formResponse`;
+        const formData = new URLSearchParams();
+        
+        formData.append(ENTRY_FRECUENCIA, frecuencia);
+        formData.append(ENTRY_EDAD_ESTIMADA, edadEstimada);
+        formData.append(ENTRY_EDAD_REAL, edadReal);
+        formData.append(ENTRY_DIFERENCIA, diferencia);
+
+        try {
+            await fetch(formUrl, {
+                method: 'POST',
+                mode: 'no-cors',
+                headers: { 'Content-Type': 'application/x-www-form-urlencoded' },
+                body: formData.toString()
+            });
+            console.log("Respuesta registrada en la base de datos.");
+        } catch (error) {
+            console.error("Error al enviar a Google Forms:", error);
+        }
+    }
+
+    dibujarOsciloscopio();
+    cambiarFrecuenciaGlobal(frecuenciaActual);
 </script>
 </body>
 </html>
