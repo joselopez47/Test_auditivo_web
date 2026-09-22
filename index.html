@@ -335,12 +335,12 @@
 </div>
 
 <script>
-    // CONFIGURACIÓN DE TU GOOGLE FORM (REEMPLAZAR CON TUS IDS DE GOOGLE FORMS)
-    const FORM_ID =  "1FAIpQLSeEdZgp2U4FmDK0EaVwmU-Gj7Ey57k-Cs11llsASF0IyA220w;
+    // CONFIGURACIÓN DE TU GOOGLE FORM
+    const FORM_ID = "1FAIpQLSeEdZgp2U4FmDK0EaVwmU-Gj7Ey57k-Cs11llsASF0IyA220w"; // CORREGIDO: comillas cerradas
     const ENTRY_FRECUENCIA = "entry.1406846408";     // Campo: Frecuencia máxima (Hz)
     const ENTRY_EDAD_ESTIMADA = "entry.618603006";  // Campo: Edad auditiva estimada
     const ENTRY_EDAD_REAL = "entry.1938632190";      // Campo: Edad real del usuario
-    const ENTRY_DIFERENCIA = "entry.367777051";     // Campo: Brecha/Diferencia (Edad Estimada - Edad Real)
+    const ENTRY_DIFERENCIA = "entry.367777051";     // Campo: Brecha/Diferencia
 
     let reproduciendo = false;
     let frecuenciaActual = 12000;
@@ -532,7 +532,7 @@
     btnVol1.addEventListener('click', () => abrirRegistroVoluntario(1));
     btnVol2.addEventListener('click', () => abrirRegistroVoluntario(2));
 
-    // PASO 2: Confirmación e ingreso a Google Forms (Formato Indistinguible)
+    // PASO 2: Confirmación e ingreso a Google Forms
     btnGuardarRegistro.addEventListener('click', async () => {
         let edadReal = parseInt(txtEdadReal.value);
         
@@ -545,21 +545,19 @@
         lblEstado.innerHTML = "Guardando respuesta<br>en Google Forms...";
         lblEstado.style.color = "#A78BFA";
 
-        // Métrica: Cálculo de la diferencia (Brecha auditiva)
         let diferencia = (parseFloat(edadAuditivaCalculada) - edadReal).toFixed(1);
 
-        // Enviar datos unificados (sin identificar voluntario 1 o 2 en las columnas)
         await registrarEnGoogleForms(frecuenciaActual, edadAuditivaCalculada, edadReal, diferencia);
 
         lblEstado.innerHTML = `¡Registro procesado con éxito!<br>Diferencia: ${diferencia} años.`;
         lblEstado.style.color = "#34D399";
     });
 
-    // Envío vía POST silencioso a Google Forms
+    // Envío silencioso a Google Forms mediante no-cors
     async function registrarEnGoogleForms(frecuencia, edadEstimada, edadReal, diferencia) {
         const formUrl = `https://docs.google.com/forms/d/e/${FORM_ID}/formResponse`;
-        const formData = new URLSearchParams();
-        
+        const formData = new FormData();
+
         formData.append(ENTRY_FRECUENCIA, frecuencia);
         formData.append(ENTRY_EDAD_ESTIMADA, edadEstimada);
         formData.append(ENTRY_EDAD_REAL, edadReal);
@@ -567,17 +565,16 @@
 
         try {
             await fetch(formUrl, {
-                method: 'POST',
-                mode: 'no-cors',
-                headers: { 'Content-Type': 'application/x-www-form-urlencoded' },
-                body: formData.toString()
+                method: "POST",
+                mode: "no-cors",
+                body: formData
             });
-            console.log("Respuesta registrada en la base de datos.");
         } catch (error) {
-            console.error("Error al enviar a Google Forms:", error);
+            console.error("Error al enviar las respuestas:", error);
         }
     }
 
+    // Inicializar visualización de la onda y frecuencia inicial
     dibujarOsciloscopio();
     cambiarFrecuenciaGlobal(frecuenciaActual);
 </script>
