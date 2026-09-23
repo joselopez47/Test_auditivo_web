@@ -337,10 +337,10 @@
 <script>
     // CONFIGURACIÓN DE TU GOOGLE FORM
     const FORM_ID = "1FAIpQLSeEdZgp2U4FmDk0EaVwmU-Gj7Ey57k-Cs11llsASF0IyA220w";
-    const ENTRY_FRECUENCIA = "entry.1406846408";     // Campo: Frecuencia máxima (Hz)
-    const ENTRY_EDAD_ESTIMADA = "entry.618603006";  // Campo: Edad auditiva estimada
-    const ENTRY_EDAD_REAL = "entry.1938632190";      // Campo: Edad real del usuario
-    const ENTRY_DIFERENCIA = "entry.367777051";     // Campo: Brecha/Diferencia
+    const ENTRY_FRECUENCIA = "entry.1406846408";     // Frecuencia máxima (Hz)
+    const ENTRY_EDAD_ESTIMADA = "entry.618603006";  // Edad auditiva estimada
+    const ENTRY_EDAD_REAL = "entry.1938632190";      // Edad real del usuario
+    const ENTRY_DIFERENCIA = "entry.367777051";     // Diferencia/Brecha
 
     let reproduciendo = false;
     let frecuenciaActual = 12000;
@@ -556,13 +556,13 @@
     // Envío silencioso a Google Forms mediante no-cors
   async function registrarEnGoogleForms(frecuencia, edadEstimada, edadReal, diferencia) {
     const formUrl = `https://docs.google.com/forms/d/e/${FORM_ID}/formResponse`;
-    
-    // Usar URLSearchParams en lugar de FormData
-    const data = new URLSearchParams();
-    data.append(ENTRY_FRECUENCIA, frecuencia);
-    data.append(ENTRY_EDAD_ESTIMADA, edadEstimada);
-    data.append(ENTRY_EDAD_REAL, edadReal);
-    data.append(ENTRY_DIFERENCIA, diferencia);
+
+    // Se utiliza URLSearchParams para formatear los datos de forma estándar
+    const payload = new URLSearchParams();
+    payload.append(ENTRY_FRECUENCIA, frecuencia);
+    payload.append(ENTRY_EDAD_ESTIMADA, edadEstimada);
+    payload.append(ENTRY_EDAD_REAL, edadReal);
+    payload.append(ENTRY_DIFERENCIA, diferencia);
 
     try {
         await fetch(formUrl, {
@@ -571,9 +571,9 @@
             headers: {
                 "Content-Type": "application/x-www-form-urlencoded"
             },
-            body: data
+            body: payload
         });
-        console.log("Enviado correctamente");
+        console.log("Enviado correctamente a Google Forms");
     } catch (error) {
         console.error("Error al enviar las respuestas:", error);
     }
