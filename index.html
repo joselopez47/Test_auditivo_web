@@ -547,35 +547,55 @@
 
         let diferencia = (parseFloat(edadAuditivaCalculada) - edadReal).toFixed(1);
 
-        await registrarEnGoogleForms(frecuenciaActual, edadAuditivaCalculada, edadReal, diferencia);
+        const enviado = await registrarEnGoogleForms(
+    frecuenciaActual,
+    edadAuditivaCalculada,
+    edadReal,
+    diferencia
+);
 
-        lblEstado.innerHTML = `¡Registro procesado con éxito!<br>Diferencia: ${diferencia} años.`;
-        lblEstado.style.color = "#34D399";
+if (enviado) {
+    lblEstado.innerHTML =
+        `¡Registro procesado!<br>Diferencia: ${diferencia} años.`;
+    lblEstado.style.color = "#34D399";
+} else {
+    lblEstado.innerHTML =
+        `Error al guardar el registro.`;
+    lblEstado.style.color = "#EF4444";
+}
     });
 
     // Envío silencioso a Google Forms mediante no-cors
-  async function registrarEnGoogleForms(frecuencia, edadEstimada, edadReal, diferencia) {
-    const formUrl = `https://docs.google.com/forms/d/e/${FORM_ID}/formResponse`;
+ async function registrarEnGoogleForms(
+    frecuencia,
+    edadEstimada,
+    edadReal,
+    diferencia
+) {
+    const formUrl =
+        `https://docs.google.com/forms/d/e/${FORM_ID}/formResponse`;
 
-    // Se utiliza URLSearchParams para formatear los datos de forma estándar
     const payload = new URLSearchParams();
+
     payload.append(ENTRY_FRECUENCIA, frecuencia);
     payload.append(ENTRY_EDAD_ESTIMADA, edadEstimada);
     payload.append(ENTRY_EDAD_REAL, edadReal);
     payload.append(ENTRY_DIFERENCIA, diferencia);
 
     try {
-        await fetch(formUrl, {
+        const respuesta = await fetch(formUrl, {
             method: "POST",
             mode: "no-cors",
-            headers: {
-                "Content-Type": "application/x-www-form-urlencoded"
-            },
             body: payload
         });
-        console.log("Enviado correctamente a Google Forms");
+
+        console.log("Petición enviada:", respuesta);
+
+        return true;
+
     } catch (error) {
-        console.error("Error al enviar las respuestas:", error);
+        console.error("Error al enviar:", error);
+        return false;
     }
 }
 
